@@ -1,4 +1,3 @@
-# .gitignore
 # Python
 __pycache__/
 *.pyc
@@ -9,6 +8,7 @@ __pycache__/
 dist/
 build/
 .venv/
+.dashboard/
 venv/
 env/
 ENV/
@@ -42,4 +42,4 @@ docker-compose.override.yml
 # Tests
 .coverage
 htmlcov/
-.pytest_cache/
+.pytest_cache
