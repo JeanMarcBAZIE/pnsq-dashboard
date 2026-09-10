@@ -1,35 +1,47 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout/Layout';
-import LoginPage from './pages/Login'; // Sera créé en Phase 4
 
-// Pages métier (Phase 5 et plus)
-import DashboardPage from './pages/Dashboard';
-import MapPage from './pages/Map';
-import StationPage from './pages/Station';
-import AlertsPage from './pages/Alerts';
-import ReportsPage from './pages/Reports';
-import SettingsPage from './pages/Settings';
+// Pages
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Map from './pages/Map';
+import Station from './pages/Station';
+import Alerts from './pages/Alerts';
+import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 
 function App() {
-  // Simulation d'utilisateur connecté pour le layout (à remplacer plus tard)
-  const isAuthenticated = true;
+    return (
+        <Router>
+            <AuthProvider>
+                <Routes>
+                    {/* Page de login accessible à tous */}
+                    <Route path="/login" element={<Login />} />
 
-  return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      
-      <Route element={<Layout />}>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/map" element={<MapPage />} />
-        <Route path="/stations/:stationId" element={<StationPage />} />
-        <Route path="/alerts" element={<AlertsPage />} />
-        <Route path="/reports" element={<ReportsPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-      </Route>
-    </Routes>
-  );
+                    {/* Routes protégées avec Layout */}
+                    <Route element={<ProtectedRoute />}>
+                        <Route element={<Layout />}>
+                            <Route path="/" element={<Dashboard />} />
+                            <Route path="/map" element={<Map />} />
+                            <Route path="/stations/:id" element={<Station />} />
+                            <Route path="/alerts" element={<Alerts />} />
+                            <Route path="/reports" element={<Reports />} />
+                            {/* Routes réservées aux Admins/Managers */}
+                            <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'MANAGER']} />}>
+                                <Route path="/settings" element={<Settings />} />
+                            </Route>
+                        </Route>
+                    </Route>
+
+                    {/* Redirection par défaut */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+            </AuthProvider>
+        </Router>
+    );
 }
 
 export default App;

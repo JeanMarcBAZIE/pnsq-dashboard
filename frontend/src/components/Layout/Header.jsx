@@ -1,89 +1,74 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { FiBell, FiUser, FiMenu, FiLogOut, FiSettings as FiSettingsIcon } from 'react-icons/fi';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
+import { BellIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 
-const Header = ({ toggleSidebar }) => {
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+const Header = ({ title }) => {
+    const navigate = useNavigate();
+    const { user, logout } = useContext(AuthContext);
+    const [showDropdown, setShowDropdown] = useState(false);
 
-  // Simulation d'utilisateur connecté
-  const user = { first_name: 'Jean', last_name: 'Dupont', role: 'Technicien' };
+    const handleLogout = async () => {
+        await logout();
+        navigate('/login');
+    };
 
-  return (
-    <header className="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4 md:px-6">
-      {/* Partie gauche : Menu burger + Titre */}
-      <div className="flex items-center">
-        <button 
-          onClick={toggleSidebar} 
-          className="p-2 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none md:hidden"
-        >
-          <FiMenu className="text-2xl" />
-        </button>
-        <div className="hidden md:block">
-          <h1 className="text-xl font-semibold text-gray-800">
-            <NavLink to="/dashboard">PNSQ</NavLink>
-          </h1>
-        </div>
-      </div>
+    return (
+        <header className="bg-white shadow-sm border-b border-gray-200 h-16 fixed top-0 right-0 left-0 z-30 lg:left-64">
+            <div className="h-full px-4 flex items-center justify-between">
+                {/* Titre de la page avec fil d'Ariane */}
+                <div className="flex items-center">
+                    <h1 className="text-xl font-semibold text-anam-blue">{title}</h1>
+                </div>
 
-      {/* Partie droite : Notifications et Profil */}
-      <div className="flex items-center space-x-4">
-        {/* Sélecteur de fuseau horaire (simulé) */}
-        <span className="text-sm text-gray-500 hidden sm:inline">UTC+1</span>
+                {/* Partie droite : Notifications + Profil */}
+                <div className="flex items-center space-x-4">
+                    {/* Bouton Notifications */}
+                    <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-100">
+                        <BellIcon className="h-6 w-6" />
+                        <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-anam-danger ring-2 ring-white"></span>
+                    </button>
 
-        {/* Bouton Notifications */}
-        <div className="relative">
-          <button 
-            onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-            className="p-2 rounded-full text-gray-500 hover:bg-gray-100 relative"
-          >
-            <FiBell className="text-xl" />
-            <span className="absolute top-0 right-0 block h-2.5 w-2.5 bg-red-500 rounded-full ring-2 ring-white"></span>
-          </button>
-          {isNotificationsOpen && (
-            <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg py-1 z-20 border border-gray-200">
-              <div className="px-4 py-2 border-b border-gray-100">
-                <span className="font-medium">Notifications</span>
-              </div>
-              <div className="max-h-60 overflow-y-auto">
-                <p className="text-sm text-gray-500 px-4 py-2">Aucune nouvelle notification</p>
-              </div>
-              <div className="px-4 py-2 border-t border-gray-100 text-center">
-                <NavLink to="/alerts" className="text-sm text-blue-600 hover:underline">Voir toutes les alertes</NavLink>
-              </div>
+                    {/* Profil Utilisateur */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setShowDropdown(!showDropdown)}
+                            className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                            <UserCircleIcon className="h-8 w-8 text-anam-blue" />
+                            <span className="hidden md:block text-sm font-medium text-gray-700">
+                                {user?.full_name || user?.username}
+                            </span>
+                            <span className="hidden md:block text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                                {user?.role_display || user?.role}
+                            </span>
+                        </button>
+
+                        {/* Menu déroulant */}
+                        {showDropdown && (
+                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-200 z-50">
+                                <button
+                                    onClick={() => {
+                                        setShowDropdown(false);
+                                        // Naviguer vers la page de profil (à créer plus tard)
+                                    }}
+                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                >
+                                    Mon profil
+                                </button>
+                                <button
+                                    onClick={handleLogout}
+                                    className="block w-full text-left px-4 py-2 text-sm text-anam-danger hover:bg-gray-100"
+                                >
+                                    Déconnexion
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
-          )}
-        </div>
-
-        {/* Menu Profil */}
-        <div className="relative">
-          <button 
-            onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-            className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            <span className="sr-only">Ouvrir le menu utilisateur</span>
-            <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-              {user.first_name.charAt(0)}{user.last_name.charAt(0)}
-            </div>
-          </button>
-          {isProfileMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 border border-gray-200">
-              <div className="px-4 py-2 border-b border-gray-100">
-                <p className="text-sm font-medium text-gray-900">{user.first_name} {user.last_name}</p>
-                <p className="text-xs text-gray-500">{user.role}</p>
-              </div>
-              <NavLink to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-                <FiSettingsIcon className="mr-2" /> Paramètres
-              </NavLink>
-              <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-                <FiLogOut className="mr-2" /> Déconnexion
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </header>
-  );
+        </header>
+    );
 };
 
 export default Header;

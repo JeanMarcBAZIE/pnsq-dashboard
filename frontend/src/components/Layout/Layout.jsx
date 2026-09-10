@@ -1,29 +1,44 @@
-import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import React from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 
+// Fonction pour obtenir le titre de la page en fonction de l'URL
+const getPageTitle = (pathname) => {
+    const titles = {
+        '/': 'Tableau de Bord National',
+        '/map': 'Carte Interactive',
+        '/alerts': 'Centre d\'Alertes',
+        '/reports': 'Rapports & Exports',
+        '/settings': 'Administration',
+    };
+    // Pour les pages dynamiques comme /stations/123
+    if (pathname.startsWith('/stations/')) {
+        return 'Fiche Station';
+    }
+    return titles[pathname] || 'PNSQ';
+};
+
 const Layout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+    const location = useLocation();
+    const title = getPageTitle(location.pathname);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+    return (
+        <div className="flex h-screen bg-anam-bg">
+            {/* Sidebar fixe à gauche */}
+            <Sidebar />
 
-  return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+            {/* Contenu principal avec Header fixe */}
+            <div className="flex-1 flex flex-col overflow-hidden lg:ml-64">
+                <Header title={title} />
 
-      {/* Contenu principal */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header toggleSidebar={toggleSidebar} />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
-          <Outlet /> {/* C'est ici que les pages (Dashboard, Map, etc.) s'affichent */}
-        </main>
-      </div>
-    </div>
-  );
+                {/* Zone de contenu avec scroll */}
+                <main className="flex-1 overflow-y-auto p-4 mt-16">
+                    <Outlet />
+                </main>
+            </div>
+        </div>
+    );
 };
 
 export default Layout;
