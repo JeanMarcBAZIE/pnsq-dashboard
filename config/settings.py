@@ -35,9 +35,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
-    'corsheaders',
     'drf_yasg',
-
+    'corsheaders',
     # Applications métier (à décommenter au fur et à mesure)
     'apps.core',
     'apps.accounts',
@@ -157,3 +156,6 @@ SIMPLE_JWT = {
 
 # --- Type de clé primaire par défaut ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Modèle utilisateur personnalisé
+AUTH_USER_MODEL = 'accounts.User'
