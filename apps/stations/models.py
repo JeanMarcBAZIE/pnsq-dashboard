@@ -76,3 +76,6 @@ class Station(models.Model):
     @property
     def is_down(self):
         return self.status in [self.StationStatus.DOWN, self.StationStatus.INACTIVE]
+
+
+    
