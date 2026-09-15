@@ -20,9 +20,10 @@ class Station(models.Model):
         INACTIVE = 'INACTIVE', 'Inactive'
     
     # Identifiants
-    id = models.CharField(max_length=20, primary_key=True, verbose_name="ID Station")
+
+    station_id = models.CharField(max_length=20, primary_key=True, verbose_name='Code_Clidata') # Important
     name = models.CharField(max_length=100, verbose_name="Nom")
-    code = models.CharField(max_length=20, unique=True, verbose_name="Code")
+    code = models.CharField(max_length=20, unique=True, verbose_name="Code_wigos")
     
     # Localisation
     region = models.ForeignKey(Region, on_delete=models.PROTECT, verbose_name="Région")

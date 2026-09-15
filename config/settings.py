@@ -159,3 +159,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Modèle utilisateur personnalisé
 AUTH_USER_MODEL = 'accounts.User'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'pnsq-cache',
+        'TIMEOUT': 60,
+    }
+}
+

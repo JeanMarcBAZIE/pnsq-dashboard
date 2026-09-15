@@ -40,6 +40,7 @@ urlpatterns = [
 
     # API v1 - Stations
     path('api/v1/', include('apps.stations.urls')),
+    path('api/v1/dashboard/', include('apps.dashboard.urls')),
 
     # API v1 - Alertes
     path('api/v1/', include('apps.alerts.urls')),
