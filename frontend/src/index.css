@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* Palette ANAM (issue du Volume 2) */
+  /* Palette ANAM-Bf (Burkina Faso) */
   --color-anam-blue: #00477c;
   --color-anam-gray: #4a5568;
   --color-anam-bg: #f7faec;

@@ -96,8 +96,8 @@ const MarkerClusterGroup = ({ children }) => {
 
 // Composant principal de la carte
 const StationMap = ({ stations, onStationClick, selectedStation }) => {
-  const defaultCenter = [31.7917, -7.0926]; // Centre du Maroc
-  const defaultZoom = 6;
+  const defaultCenter = [12.2383, -1.5616]; // Centre du Burkina
+  const defaultZoom = 7;
 
   // Créer une icône personnalisée selon le statut
   const createStationIcon = (statusCode) => {

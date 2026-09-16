@@ -290,7 +290,7 @@ const Sidebar = ({ isOpen, toggleSidebar, alertCount = 0 }) => {
               <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                 <span className="text-blue-900 font-bold text-sm">A</span>
               </div>
-              <span className="font-bold text-lg">PNSQ ANAM</span>
+              <span className="font-bold text-lg">PNSQ ANAM-BF</span>
             </div>
             <button
               onClick={toggleSidebar}
